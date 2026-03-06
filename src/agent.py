@@ -156,8 +156,10 @@ class LearningAgent:
             if analysis["intent"] == "unknown":
                 analysis["intent"] = "file_operation"
         
-        # Detect search needs
-        search_keywords = ["search", "find", "look up", "lookup"]
+        # Detect search needs (expanded to include questions)
+        search_keywords = ["search", "find", "look up", "lookup", "what is", "what are", 
+                          "who is", "who are", "how to", "how do", "why", "when", "where",
+                          "explain", "tell me about", "information about"]
         if any(kw in prompt_lower for kw in search_keywords):
             analysis["requires_search"] = True
             if analysis["intent"] == "unknown":
@@ -205,10 +207,16 @@ class LearningAgent:
                 })
                 print(f"   Planned: Write to file")
         
-        # Plan search
+        # Plan search (improved to extract the actual question)
         if analysis["requires_search"]:
-            # Extract search query (simple heuristic)
-            query = prompt.replace("search for", "").replace("find", "").strip()
+            # Extract the actual query by removing question words
+            query = prompt
+            for prefix in ["what is", "what are", "who is", "who are", "how to", "how do", 
+                          "search for", "find", "tell me about", "explain"]:
+                if prefix in prompt.lower():
+                    query = prompt.lower().replace(prefix, "").strip()
+                    break
+            
             plan["needs_tools"] = True
             plan["tool_actions"].append({
                 "tool": "web_search",

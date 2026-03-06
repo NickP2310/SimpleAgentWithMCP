@@ -1,0 +1,13 @@
+tools:
+  - name: "file_ops"
+    enabled: true
+    config:
+      allowed_paths: ["./workspace"]
+      
+  - name: "calculator"
+    enabled: true
+    
+  - name: "web_search"
+    enabled: true
+    config:
+      simulated: true

@@ -127,7 +127,15 @@ def run_interactive():
             
             response = agent.process_prompt(prompt)
             
-            print("\n🤖 Agent:", response.result if response.success else f"Error: {response.error}")
+            # Display agent response with clear formatting
+            print("\n" + "=" * 60)
+            print("🤖 AGENT RESPONSE")
+            print("=" * 60)
+            if response.success:
+                print(response.result)
+            else:
+                print(f"❌ Error: {response.error}")
+            print("=" * 60)
             
         except KeyboardInterrupt:
             print("\n\n👋 Goodbye!")
